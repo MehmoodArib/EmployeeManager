@@ -1,11 +1,15 @@
 import React, { Component } from 'react';
 import { Text, TouchableWithoutFeedback, View } from 'react-native';
 import { CardSection } from './common';
+import NavigationService from '../NavigationService';
+//import { Actions } from 'react-native-router-flux';
 
 
 class ListItem extends Component {
     onRowPress() {
-        Actions.employeeEdit({ employee: this.props.employee });
+        //Actions.employeeEdit({ employee: this.props.employee });
+        console.log(this.props.employee);
+        NavigationService.navigate('employeeEdit', {employee: this.props.employee});
     }
 
     render() {

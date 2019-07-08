@@ -1,45 +1,46 @@
 import React, { Component } from 'react';
+import { FlatList } from 'react-native';
 import _ from 'lodash';
 import { connect } from 'react-redux';
-import { ListView } from 'react-native';
+import Icon from 'react-native-vector-icons/MaterialIcons';
+import { HeaderButtons, HeaderButton, Item } from 'react-navigation-header-buttons';
 import { employeesFetch } from '../actions';
 import ListItem from './ListItem';
+import { NavigationActions } from 'react-navigation';
+
+const MaterialIcons = passMeFurther => (
+    <HeaderButton {...passMeFurther} IconComponent={Icon} iconSize={24} color="black" />
+  );
 
 class EmployeeList extends Component {
-    static navigationOptions = {
+    static navigationOptions = ({ navigation }) =>({
         title: 'Employees',
-    };
-    componentWillMount() {
+        headerLeft: (
+            <HeaderButtons HeaderButtonComponent={MaterialIcons}>
+                <Item title="search" iconName="menu" onPress={() => navigation.toggleDrawer()} />
+            </HeaderButtons>
+        ),
+        headerRight: (
+            <HeaderButtons HeaderButtonComponent={MaterialIcons}>
+                <Item title="search" iconName="add" onPress={() => navigation.navigate('employeeCreate')} />
+            </HeaderButtons>
+        )
+    });
+
+    componentDidMount() {
         this.props.employeesFetch();
-        this.createDataSource(this.props);
     }
 
-    componentWillReceiveProps(nextProps) {
-        //nextProps are the next set of props that this component
-        //will e rendered with
-        //this.props is still the old set of props
-        this.createDataSource(nextProps);
-    }
-
-    createDataSource({ employees }) {
-        const ds = new ListView.DataSource({
-            rowHasChanged: (r1, r2) => r1 !== r2
-        });
-        this.dataSource = ds.cloneWithRows(employees);
-        console.log(employees);
-    }
-
-    renderRow(employee) {
-        return <ListItem employee={employee} />;
+    renderRow({ item }) {
+        return <ListItem employee={item} />;
     }
 
     render() {
         return (
-            <ListView
+            <FlatList
                 style={{ flex: 1 }}
-                enableEmptySections
-                dataSource={this.dataSource}
-                renderRow={this.renderRow}
+                data={this.props.employees}
+                renderItem={this.renderRow}
             />
         );
     }

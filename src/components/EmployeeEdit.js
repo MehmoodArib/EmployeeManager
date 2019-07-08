@@ -15,12 +15,13 @@ class EmployeeEdit extends Component {
     state = { showModal: false };
 
     componentWillMount() {
-        _.each(this.props.employee, (value, prop) => {
+
+        _.each(this.props.navigation.getParam('employee',{}), (value, prop) => {
             this.props.employeeUpdate({ prop, value });
         });
     }
     onAccept = () => {
-        const { uid } = this.props.employee;
+        const { uid } = this.props.navigation.getParam('employee',{});
         this.props.employeeDelete({ uid });
         console.log(uid);
         this.setState({ showModal: false });
@@ -31,7 +32,7 @@ class EmployeeEdit extends Component {
     }
     onButtonPress() {
         const { name, phone, shift } = this.props;
-        this.props.employeeSave({ name, phone, shift, uid: this.props.employee.uid });
+        this.props.employeeSave({ name, phone, shift, uid: this.props.navigation.getParam('employee',{}).uid });
     }
 
     onTextPress() {

@@ -15,8 +15,10 @@ function navigate(routeName, params) {
         })
     );
 }
-function pop() {
-    _navigator._navigator.pop();
+function pop(screenName) {
+    _navigator.dispatch(
+        NavigationActions.back()
+    );
 }
 
 // add other navigation functions that you need and export them
